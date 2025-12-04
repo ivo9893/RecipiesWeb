@@ -1,6 +1,8 @@
 import './App.css';
 import { Box, TextField, Grid, Stack, Typography, Button, FormControlLabel, Checkbox, Link } from '@mui/material';
 import fryingPanImage from './frying-pan-empty-assorted-spices.jpg';
+import {useState} from 'react'
+import { loginUser } from './services/api';
 
 function App() {
   return (
@@ -19,6 +21,31 @@ function App() {
 
 function LeftSide() {
 
+  const [phone, setPhoneValue] = useState('');
+  const [password, setPasswordValue] = useState('');
+
+
+  const handlePhoneChange = (event) =>{
+    setPhoneValue(event.target.value);
+    console.log(phone);
+  }
+
+  const handlePasswordChange = (event) =>{
+    setPasswordValue(event.target.value);
+    console.log(password);
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await loginUser(phone, password)
+      .then(data => {
+        console.log('Login successful:', data);
+      })
+      .catch(error => {
+        console.error('Error during login:', error.message);
+      });
+  }
+
   return (
     <Box
       component="form"
@@ -36,14 +63,15 @@ function LeftSide() {
           Login to access your account
         </Typography>
 
-        <PhoneTextField />
-        <PasswordTextField />
+        <PhoneTextField   value={phone} onChange={handlePhoneChange} />
+        <PasswordTextField value={password} onChange={handlePasswordChange} />
 
         <RememberMeAndForgotPassword />
         <Button
           variant="contained"
           size="large"
           sx={{ mt: 2 }}
+          onClick={handleSubmit}
         >
           Login
         </Button>
@@ -182,7 +210,7 @@ function RememberMeAndForgotPassword() {
   );
 }
 
-function PhoneTextField() {
+function PhoneTextField({value, onChange}) {
   return (
     <Box>
       <TextField
@@ -190,13 +218,15 @@ function PhoneTextField() {
         variant="outlined"
         fullWidth
         type="tel"
+        value={value}
+        onChange={onChange}
         placeholder="+1 234 567 8900"
       />
     </Box>
   );
 }
 
-function PasswordTextField() {
+function PasswordTextField({value, onChange}) {
   return (
     <Box>
       <TextField
@@ -204,6 +234,8 @@ function PasswordTextField() {
         variant="outlined"
         fullWidth
         type="password"
+        value={value}
+        onChange={onChange}
         placeholder="Enter your password"
       />
     </Box>
@@ -214,8 +246,7 @@ function RightSide() {
   return (
     <Box
       sx={{
-        height: '100vh',
-        width: '100%',
+        minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
