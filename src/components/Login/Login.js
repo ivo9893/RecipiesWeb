@@ -1,12 +1,12 @@
-import './App.css';
+import './Login.css';
 import { Box, TextField, Grid, Stack, Typography, Button, FormControlLabel, Checkbox, Link } from '@mui/material';
-import fryingPanImage from './frying-pan-empty-assorted-spices.jpg';
+import fryingPanImage from '../../assets/images/frying-pan-empty-assorted-spices.jpg';
 import {useState} from 'react'
-import { loginUser } from './services/api';
+import { loginUser } from '../../services/api';
 
-function App() {
+export default function Login() {
   return (
-    <div className="App">
+    <div className="Login">
       <Grid container spacing={2} sx={{ width: '100%', minHeight: '100vh' }}>
         <Grid size={5}>
           <LeftSide />
@@ -21,23 +21,21 @@ function App() {
 
 function LeftSide() {
 
-  const [phone, setPhoneValue] = useState('');
+  const [email, setEmailValue] = useState('');
   const [password, setPasswordValue] = useState('');
 
 
-  const handlePhoneChange = (event) =>{
-    setPhoneValue(event.target.value);
-    console.log(phone);
+  const handleEmailChange = (event) =>{
+    setEmailValue(event.target.value);
   }
 
   const handlePasswordChange = (event) =>{
     setPasswordValue(event.target.value);
-    console.log(password);
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await loginUser(phone, password)
+    await loginUser(email, password)
       .then(data => {
         console.log('Login successful:', data);
       })
@@ -63,7 +61,7 @@ function LeftSide() {
           Login to access your account
         </Typography>
 
-        <PhoneTextField   value={phone} onChange={handlePhoneChange} />
+        <EmailTextField   value={email} onChange={handleEmailChange} />
         <PasswordTextField value={password} onChange={handlePasswordChange} />
 
         <RememberMeAndForgotPassword />
@@ -210,17 +208,17 @@ function RememberMeAndForgotPassword() {
   );
 }
 
-function PhoneTextField({value, onChange}) {
+function EmailTextField({value, onChange}) {
   return (
     <Box>
       <TextField
-        label="Phone Number"
+        label="Email"
         variant="outlined"
         fullWidth
-        type="tel"
+        type="email"
         value={value}
         onChange={onChange}
-        placeholder="+1 234 567 8900"
+        placeholder="Enter your email"
       />
     </Box>
   );
@@ -266,5 +264,3 @@ function RightSide() {
     </Box>
   );
 }
-
-export default App;
