@@ -8,6 +8,7 @@ async function refreshToken(){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            credentials: 'include'
         }
     });
 
@@ -39,7 +40,7 @@ export async function apiFetch(url, options = {}) {
 
     if (response.status === 401) {
         try{
-            const newToken = await refreshToken(response);
+            const newToken = await refreshToken();
 
             const retryHeaders = {
                 ...h,
