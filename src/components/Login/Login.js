@@ -1,8 +1,10 @@
 import './Login.css';
 import { Box, TextField, Grid, Stack, Typography, Button, FormControlLabel, Checkbox, Link } from '@mui/material';
 import fryingPanImage from '../../assets/images/frying-pan-empty-assorted-spices.jpg';
-import {useState} from 'react'
+import { useState } from 'react';
 import { loginUser } from '../../services/api';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   return (
@@ -23,7 +25,12 @@ function LeftSide() {
 
   const [email, setEmailValue] = useState('');
   const [password, setPasswordValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const setIsLoadingState = (state) => {
+    setIsLoading(state);
+  }
 
   const handleEmailChange = (event) =>{
     setEmailValue(event.target.value);
@@ -35,12 +42,19 @@ function LeftSide() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await loginUser(email, password)
+    setIsLoadingState(true);
+
+    await apiFetch('/Auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    })
       .then(data => {
-        console.log('Login successful:', data);
+        navigate('/main');
       })
       .catch(error => {
         console.error('Error during login:', error.message);
+      }).finally(()=>{
+        setIsLoadingState(false);
       });
   }
 
@@ -51,7 +65,9 @@ function LeftSide() {
         marginTop: { xs: 4, md: 25 },
         px: 2,
       }}
+      className={isLoading ? 'loading' : ''}
     >
+      {isLoading ? <CircularProgress /> : null}
       <Stack spacing={3} direction="column">
         <Typography variant="h3" component="h1" sx={{ fontWeight: 'bold' }}>
           Welcome back
@@ -70,6 +86,7 @@ function LeftSide() {
           size="large"
           sx={{ mt: 2 }}
           onClick={handleSubmit}
+          loading={isLoading}
         >
           Login
         </Button>
