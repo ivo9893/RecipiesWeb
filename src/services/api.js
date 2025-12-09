@@ -1,6 +1,6 @@
 import { getAccessToken, setAccessToken } from "./authService";
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://localhost:7193/api';
 
 
 async function refreshToken(){
@@ -17,11 +17,13 @@ async function refreshToken(){
     }
 
     const data = await response.json();
-    setAccessToken(data.accessToken);
-    return data.accessToken;
+    setAccessToken(data.access_token);
+    return data.access_token;
 }
 
 export async function apiFetch(url, options = {}) {
+
+    try{
     let token = getAccessToken();
 
     const {headers : h, ...restOptions} = options;
@@ -63,6 +65,9 @@ export async function apiFetch(url, options = {}) {
     }
 
     return await response.json();
+    } catch (error){
+        throw error;
+    }
 }
 
 
@@ -81,5 +86,8 @@ export async function loginUser(email, password) {
         throw new Error(error.message || 'Login failed');
     }
 
-    return await response.json();
+    const data = await response.json();
+    setAccessToken(data.access_token);
+
+    return true;
 }

@@ -2,7 +2,7 @@ import './Login.css';
 import { Box, TextField, Grid, Stack, Typography, Button, FormControlLabel, Checkbox, Link } from '@mui/material';
 import fryingPanImage from '../../assets/images/frying-pan-empty-assorted-spices.jpg';
 import { useState } from 'react';
-import { apiFetch } from '../../services/api';
+import { apiFetch, loginUser } from '../../services/api';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,19 +44,17 @@ function LeftSide() {
     event.preventDefault();
     setIsLoadingState(true);
 
-    await apiFetch('/Auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
+    await loginUser(email, password)
+    .then(async () => {
+      console.log('Login successful');
+      navigate('/main');
     })
-      .then(data => {
-        console.log('Login successful:', data);
-        navigate('/main');
-      })
-      .catch(error => {
-        console.error('Error during login:', error.message);
-      }).finally(()=>{
-        setIsLoadingState(false);
-      });
+    .catch(error => {
+      console.error('Error during login:', error.message);
+    })
+    .finally(()=>{
+      setIsLoadingState(false);
+    });
   }
 
   return (
