@@ -3,13 +3,12 @@ import { getAccessToken, setAccessToken } from "./authService";
 const API_BASE_URL = 'http://localhost:5000/api';
 
 
-async function refreshToken(refreshToken){
+async function refreshToken(){
     const response = await fetch(`${API_BASE_URL}/Auth/refresh-token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refreshToken }),
+        }
     });
 
     if(!response.ok){
@@ -32,7 +31,7 @@ export async function apiFetch(url, options = {}) {
         ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     };
 
-    const response = await fetch(`${API_BASE_URL}${url}`, {
+    let response = await fetch(`${API_BASE_URL}${url}`, {
         ...restOptions,
         headers,
         credentials: 'include'
@@ -40,7 +39,7 @@ export async function apiFetch(url, options = {}) {
 
     if (response.status === 401) {
         try{
-            const newToken = await refreshToken();
+            const newToken = await refreshToken(response);
 
             const retryHeaders = {
                 ...h,
