@@ -2,7 +2,7 @@ import './Login.css';
 import { Box, TextField, Grid, Stack, Typography, Button, FormControlLabel, Checkbox, Link } from '@mui/material';
 import fryingPanImage from '../../assets/images/frying-pan-empty-assorted-spices.jpg';
 import { useState } from 'react';
-import { loginUser } from '../../services/api';
+import { apiFetch } from '../../services/api';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,6 +49,7 @@ function LeftSide() {
       body: JSON.stringify({ email, password }),
     })
       .then(data => {
+        console.log('Login successful:', data);
         navigate('/main');
       })
       .catch(error => {
