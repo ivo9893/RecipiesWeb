@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Login from './components/Login/Login';
-import Main from './components/Main/Main';
+import Login from './pages/Login/Login';
+import Main from './pages/Main/Main';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';

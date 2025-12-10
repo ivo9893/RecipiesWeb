@@ -11,8 +11,9 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Carousel from '../Carousel/Carousel';
 
-const RecipieCard = ({images}) => {
+const RecipeCard = ({images}) => {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -22,20 +23,12 @@ const RecipieCard = ({images}) => {
             R
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image={image}
-        alt="Paella dish"
-      />
+
+      <Carousel images={images} />
+      
       <CardContent>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           This impressive paella is a perfect party dish and a fun meal to cook
@@ -56,4 +49,4 @@ const RecipieCard = ({images}) => {
   );
 };
 
-export default RecipieCard;
+export default RecipeCard;
