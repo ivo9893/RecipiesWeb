@@ -1,0 +1,25 @@
+name: Codex Code Review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - "**"     # run on every branch commit
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  codex_review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Codex Code Review
+        uses: codex-ai/code-review-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
